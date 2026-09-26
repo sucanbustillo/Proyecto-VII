@@ -1,20 +1,8 @@
 <template>
   <div class="home-container">
     <!-- Barra de Navegación -->
-    <header class="navbar">
-      <div class="logo">
-        <span>Hecho en</span>
-        <strong>Puerto Morelos</strong>
-      </div>
-
-      <nav class="nav-links">
-        <a href="#inicio" @click.prevent="scrollTo('inicio')">Inicio</a>
-        <a href="#directorio" @click.prevent="scrollTo('directorio')">Explorar</a>
-        <a href="#categorias" @click.prevent="scrollTo('categorias')">Categorías</a>
-        <a href="#registro" class="btn-emprendedor" @click.prevent="irA('registro')">
-          Soy emprendedor
-        </a>
-      </nav>
+    <header >
+     
     </header>
 
     <!-- Sección Banner Principal -->
@@ -320,6 +308,7 @@ const scrollTo = (id) => {
   line-height: 1.05;
   letter-spacing: -0.05em;
   font-weight: 600;
+  color: var(--white);
 }
 
 .hero h1 span {

@@ -1,21 +1,166 @@
 <template>
 <div class="register-page">
-    <h1>Registrate</h1>
-    <form id="register-container">
-        <label>Nombre: </label><br>
-        <input id="name"><br>
-        <label>Usuario: </label><br>
-        <input id="user"><br>
-        <label>Correo: </label><br>
+  <div>
+    <h1>Crea tu cuenta</h1> 
+    <p>Completa tus datos para empezar</p>
+
+    </div><br>
+    <form @submit.prevent="handleRegister" id="register-container" novalidate>
+
+      <!-- Nombre -->
+     <!-- <label>Nombre: </label><br>
+        <input id="name"><br>-->
+
+        <div>
+          <label for="nombre">Nombre</label>
+          <input 
+            id="nombre"
+            v-model="form.nombre"
+            type="text"
+            class="form-input"
+            :class="{ 'is-invalid': errors.nombre }"
+            placeholder="Tu nombre completo"
+          />
+          <span v-if="errors.nombre" class="error-message">{{ errors.nombre }}</span>
+        </div>
+
+        <!--<label>Usuario: </label><br>
+        <input id="user"><br>-->
+
+           <!-- Usuario -->
+        <div >
+          <label for="usuario">Usuario</label>
+          <input 
+            id="usuario"
+            v-model="form.usuario"
+            type="text"
+            class="form-input"
+            :class="{ 'is-invalid': errors.usuario }"
+            placeholder="Nombre de usuario"
+          />
+          <span v-if="errors.usuario" class="error-message">{{ errors.usuario }}</span>
+        </div>
+
+        <!--<label>Correo: </label><br>
         <input type="email" id="email"><br>
-        <label>Contraseña: </label><br>
-        <input type=password id="password"><br>
-        <button type="button">Registrarse</button>
+    <-- Correo Electrónico -->
+        <div>
+          <label for="correo">Correo electrónico</label>
+          <input 
+            id="correo"
+            v-model="form.correo"
+            type="email"
+            class="form-input"
+            :class="{ 'is-invalid': errors.correo }"
+            placeholder="correo@ejemplo.com"
+          />
+          <span v-if="errors.correo" class="error-message">{{ errors.correo }}</span>
+        </div>
+
+      <!--   <label>Contraseña: </label><br>
+        <input type=password id="password"><br> -->
+<!-- Contraseña -->
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <input 
+            id="password"
+            v-model="form.password"
+            type="password"
+            class="form-input"
+            :class="{ 'is-invalid': errors.password }"
+            placeholder="••••••••"
+          />
+          <span v-if="errors.password" class="error-message">{{ errors.password }}</span>
+        </div>
+
+        <!-- Repetir Contraseña -->
+        <div class="form-group">
+          <label for="confirmPassword">Repetir contraseña</label>
+          <input 
+            id="confirmPassword"
+            v-model="form.confirmPassword"
+            type="password"
+            class="form-input"
+            :class="{ 
+              'is-invalid': errors.confirmPassword,
+              'is-valid': form.confirmPassword && form.password === form.confirmPassword
+            }"
+            placeholder="••••••••"
+          />
+          <span v-if="errors.confirmPassword" class="error-message">{{ errors.confirmPassword }}</span>
+        </div>
+
+
+
+         <button type="submit" class="btn-submit">
+          Registrarse
+        </button>
+
+
+           <!-- Redirección a Login -->
+        <div class="login-redirect">
+          <span>Si ya tienes una cuenta, </span>
+          <router-link to="/login" class="login-link">inicia sesión.</router-link>
+        </div>
+
     </form>
+
+
+
 </div>
 </template>
-<script setup>
+<script>
+export default {
+  name: 'Register',
+  data() {
+    return {
+      form: {
+        nombre: '',
+        usuario: '',
+        correo: '',
+        password: '',
+        confirmPassword: ''
+      },
+      errors: {}
+    }
+  },
+  methods: {
+    validate() {
+      this.errors = {};
+      let isValid = true;
 
+      if (!this.form.nombre) {
+        this.errors.nombre = 'El nombre es obligatorio.';
+        isValid = false;
+      }
+      if (!this.form.usuario) {
+        this.errors.usuario = 'El usuario es obligatorio.';
+        isValid = false;
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!this.form.correo || !emailRegex.test(this.form.correo)) {
+        this.errors.correo = 'Ingrese un correo electrónico válido.';
+        isValid = false;
+      }
+      if (!this.form.password || this.form.password.length < 6) {
+        this.errors.password = 'La contraseña debe tener al menos 6 caracteres.';
+        isValid = false;
+      }
+      if (this.form.password !== this.form.confirmPassword) {
+        this.errors.confirmPassword = 'Las contraseñas no coinciden.';
+        isValid = false;
+      }
+
+      return isValid;
+    },
+    handleRegister() {
+      if (this.validate()) {
+        alert('¡Registro enviado con éxito!');
+        // Lógica de API o Redirección
+      }
+    }
+  }
+}
 </script>
 <style scoped>
 .register-page {
@@ -95,27 +240,45 @@ input:focus {
   background-color: var(--white);
 }
 
-button {
+.btn-submit {
   width: 100%;
-  margin-top: 1.8rem;
-  padding: 0.85rem 1.2rem;
+  margin-top: 8px;
+  background-color: #0d9488;
+  color: #ffffff;
   border: none;
   border-radius: 0.65rem;
-  background-color: var(--primary);
-  color: var(--white);
-  font-size: 0.9rem;
+  padding: 12px;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-button:hover {
-  background-color: var(--primary-dark);
+.btn-submit:hover {
+  background-color: #0f766e;
 }
 
-button:active {
-  transform: scale(0.98);
+.login-redirect {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 0.9rem;
+  color: #6b7280;
 }
+
+.form-input.is-invalid {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+}
+
+.form-input.is-valid {
+  border-color: #10b981;
+}
+
+.error-message {
+  font-size: 0.78rem;
+  color: #ef4444;
+}
+
 
 @media (max-width: 480px) {
   #register-container {
